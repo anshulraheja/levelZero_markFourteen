@@ -1,5 +1,8 @@
 import { useState } from "react";
-
+import "./ProfitLoss.css";
+import { BsGraphUp } from "react-icons/bs";
+import { AiOutlineTwitter } from "react-icons/ai";
+import { FaLinkedin, FaGithubSquare } from "react-icons/fa";
 const initialValues = {
   purchasePrice: "",
   quantity: "",
@@ -10,10 +13,13 @@ const initialOutput = {
   percentChange: "",
   amountChange: ""
 };
+
+const year = new Date().getFullYear();
+
 export default function ProfitLoss() {
   const [values, setValues] = useState(initialValues);
   const [output, setOutput] = useState(initialOutput);
-
+  const [message, setMessage] = useState();
   function inputHandler(event) {
     const { name, value } = event.target;
     setValues({
@@ -36,7 +42,7 @@ export default function ProfitLoss() {
           percentChange: lossPercent,
           amountChange: loss
         });
-        console.log("loss");
+        setMessage("loss");
       }
       //profit
       else if (newPrice > oldPrice) {
@@ -46,43 +52,88 @@ export default function ProfitLoss() {
           percentChange: profitPercent,
           amountChange: profit
         });
-        console.log("profit");
+        setMessage("profit");
       } else {
-        console.log("nil");
+        setOutput({
+          percentChange: 0,
+          amountChange: 0
+        });
+        setMessage("Neither profit nor loss");
       }
     } else {
-      console.log("values should be greater than zero");
+      setMessage("values should be greater than zero");
     }
   }
   return (
     <>
-      <div>
-        <input
-          type="number"
-          name="purchasePrice"
-          value={values.purchasePrice}
-          onChange={inputHandler}
-          placeholder="Enter purchase price"
-        />
-        <input
-          type="number"
-          name="quantity"
-          value={values.quantity}
-          onChange={inputHandler}
-          placeholder="Enter quantity"
-        />
-        <input
-          type="number"
-          name="currentPrice"
-          value={values.currentPrice}
-          onChange={inputHandler}
-          placeholder="Enter current price"
-        />
-      </div>
-      <button onClick={checkProfitLoss}>check</button>
-      <div>
-        <h1>%: {output.percentChange}</h1>
-        <h2>Amount:{output.amountChange}</h2>
+      <div className="container">
+        <div className="left-section">
+          <div className="header">
+            <p className="header-title">
+              Stock App
+              <span>
+                <i>
+                  <BsGraphUp />
+                </i>
+              </span>
+            </p>
+            <p className="header-text">Check your profit & loss</p>
+          </div>
+          <div className="footer">
+            <p class="footer-text">© | {year} | anshulraheja</p>
+            <div class="footer-social-wrapper">
+              <a href="/">
+                <AiOutlineTwitter />
+              </a>
+              <a href="/">
+                <FaLinkedin />
+              </a>
+              <a href="/">
+                <FaGithubSquare />
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className="right-section">
+          <input
+            type="number"
+            name="purchasePrice"
+            value={values.purchasePrice}
+            onChange={inputHandler}
+            placeholder="Enter purchase price"
+          />
+          <input
+            type="number"
+            name="quantity"
+            value={values.quantity}
+            onChange={inputHandler}
+            placeholder="Enter quantity"
+          />
+          <input
+            type="number"
+            name="currentPrice"
+            value={values.currentPrice}
+            onChange={inputHandler}
+            placeholder="Enter current price"
+          />
+          <button onClick={checkProfitLoss} className="btn">
+            check
+          </button>
+          <div className="ouput-container">
+            {output.percentChange > 0 && (
+              <p>
+                The total {message} percent is {output.percentChange}%
+              </p>
+            )}
+            {output.amountChange > 0 && (
+              <p>
+                The amount {message === "loss" ? "lost" : "gained"} is Rs{" "}
+                {output.amountChange}
+              </p>
+            )}
+            {output.percentChange === 0 && <p>{message}</p>}
+          </div>
+        </div>
       </div>
     </>
   );
