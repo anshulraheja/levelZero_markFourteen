@@ -80,8 +80,8 @@ export default function ProfitLoss() {
             <p className="header-text">Check your profit & loss</p>
           </div>
           <div className="footer">
-            <p class="footer-text">© | {year} | anshulraheja</p>
-            <div class="footer-social-wrapper">
+            <p className="footer-text">© | {year} | anshulraheja</p>
+            <div className="footer-social-wrapper">
               <a href="/">
                 <AiOutlineTwitter />
               </a>
